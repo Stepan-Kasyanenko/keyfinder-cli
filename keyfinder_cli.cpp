@@ -304,6 +304,7 @@ int main(int argc, char** argv)
     KeyFinder::KeyFinder key_finder;
     KeyFinder::AudioData audio_data;
     KeyFinder::key_t key;
+    KeyFinder::Workspace workspace;
 
     // Hide av* warnings and errors
     av_log_set_callback([](void *, int, const char*, va_list) {});
@@ -311,7 +312,10 @@ int main(int argc, char** argv)
     try
     {
         fill_audio_data(file_path, audio_data);
-        key = key_finder.keyOfAudio(audio_data);
+        key_finder.progressiveChromagram(*audio_data, workspace);
+        key_finder.finalChromagram(workspace);
+        key = key_finder.keyOfChromagram(workspace);
+        //key = key_finder.keyOfAudio(audio_data);
     }
     catch (std::exception &e)
     {
