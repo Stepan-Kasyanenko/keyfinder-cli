@@ -4,6 +4,12 @@
 #include <map>
 #include <keyfinder/constants.h>
 
+#undef  SEMITONES
+#define SEMITONES 12 // per octave, obviously
+
+#undef  OCTAVES
+#define OCTAVES 6
+
 namespace KeyNotation
 {
     typedef std::map<KeyFinder::key_t, std::string> key_map;
