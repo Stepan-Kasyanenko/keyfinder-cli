@@ -302,7 +302,7 @@ int main(int argc, char** argv)
     char* file_path = argv[optind];
 
     KeyFinder::KeyFinder key_finder;
-    KeyFinder::AudioData audio_data;
+    KeyFinder::AudioData* audio_data;
     KeyFinder::key_t key;
     KeyFinder::Workspace workspace;
 
