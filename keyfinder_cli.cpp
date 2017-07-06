@@ -303,7 +303,7 @@ void fill_audio_data(const char* file_path, KeyFinder::AudioData &audio)
     1.5,
     4,
   };
-
+  // This is magic, magic, MAAAAAAAAGIC! 
   static double OCTAVE_WEIGHTS[OCTAVES] = {
     0.39997267549999998559,
     0.55634425248300645173,
@@ -316,22 +316,22 @@ void fill_audio_data(const char* file_path, KeyFinder::AudioData &audio)
   static std::vector<double> tpMajor;
   static std::vector<double> tpMinor;
 
-  const std::vector<double>& toneProfileMajor() {
+  const std::vector<double>& toneProfileMajor(double profiles[SEMITONES]) {
     if (tpMajor.size() == 0) {
       for (unsigned int o = 0; o < OCTAVES; o++) {
         for (unsigned int s = 0; s < SEMITONES; s++) {
-          tpMajor.push_back(OCTAVE_WEIGHTS[o] * MAJOR_PROFILE[s]);
+          tpMajor.push_back(OCTAVE_WEIGHTS[o] * profiles[s]);
         }
       }
     }
     return tpMajor;
   }
 
-  const std::vector<double>& toneProfileMinor() {
+  const std::vector<double>& toneProfileMinor(double profiles[SEMITONES]) {
     if (tpMinor.size() == 0) {
       for (unsigned int o = 0; o < OCTAVES; o++) {
         for (unsigned int s = 0; s < SEMITONES; s++) {
-          tpMinor.push_back(OCTAVE_WEIGHTS[o] * MINOR_PROFILE[s]);
+          tpMinor.push_back(OCTAVE_WEIGHTS[o] * profiles[s]);
         }
       }
     }
@@ -407,10 +407,17 @@ int main(int argc, char** argv)
             selected_notation = KeyNotation::mappings[optarg];
             break;
         case 'j':
+            auto profile_str = split(optarg,',');
+            double profiles[SEMITONES] = {};
+            for (unsigned int s = 0; s < SEMITONES; s++) {
+                profiles[s] =stod(profile_str[s]);
+            }
             display(std::cout,optarg);
+            toneProfileMajor(profiles);
             break;
         case 'i':
             display(std::cout,optarg);
+            toneProfileMinor();
             break;     
         }
     }
