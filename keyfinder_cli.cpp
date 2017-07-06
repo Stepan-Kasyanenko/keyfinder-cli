@@ -323,6 +323,7 @@ int main(int argc, char** argv)
         stream << mess << std::endl;
     };
 
+    display(std::cout,'1');
     // Default to the standard key notation
     auto selected_notation = KeyNotation::standard;
 
