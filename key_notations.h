@@ -8,8 +8,6 @@ namespace KeyNotation
 {
     typedef std::map<KeyFinder::key_t, std::string> key_map;
 
-
-
     /**
      * Standard Key Notation
      */
