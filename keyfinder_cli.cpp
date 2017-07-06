@@ -253,6 +253,9 @@ int main(int argc, char** argv)
                << std::endl;
     };
 
+    std::cerr << "It's my docker" << std::endl;
+    return 1;
+
     // Default to the standard key notation
     auto selected_notation = KeyNotation::standard;
 
