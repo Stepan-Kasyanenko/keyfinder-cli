@@ -382,6 +382,10 @@ int main(int argc, char** argv)
         {0, 0, 0, 0}
     };
 
+    std::vector<std::string> profile_str = {};
+    double profiles[SEMITONES] = {};
+            
+
     opterr = 0;
 
     char c;
@@ -407,9 +411,8 @@ int main(int argc, char** argv)
             selected_notation = KeyNotation::mappings[optarg];
             break;
         case 'j':
-            auto profile_str = split(optarg,',');
-            double profiles[SEMITONES] = {};
-            for (unsigned int s = 0; s < SEMITONES; s++) {
+           profile_str = split(optarg,',');
+           for (unsigned int s = 0; s < SEMITONES; s++) {
                 profiles[s] =stod(profile_str[s]);
             }
             display(std::cout,optarg);
@@ -447,7 +450,7 @@ int main(int argc, char** argv)
         fill_audio_data(file_path, audio_data);
         key_finder.progressiveChromagram(audio_data, workspace);
         key_finder.finalChromagram(workspace);
-        key = key_finder.keyOfChromaVector(workspace.chromagram->collapseToOneHop(),toneProfileMajor(),toneProfileMinor());
+        key = key_finder.keyOfChromaVector(workspace.chromagram->collapseToOneHop(),toneProfileMajor(MAJOR_PROFILE),toneProfileMinor(MINOR_PROFILE));
         //key = key_finder.keyOfAudio(audio_data);
     }
     catch (std::exception &e)
