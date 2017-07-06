@@ -2,6 +2,10 @@
 #include <mutex>
 #include <memory>
 #include <getopt.h>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
 #include <keyfinder/keyfinder.h>
 #include <keyfinder/constants.h>
 
@@ -310,6 +314,23 @@ void fill_audio_data(const char* file_path, KeyFinder::AudioData &audio)
     return tpMinor;
   }
 
+template<typename Out>
+void split(const std::string &s, char delim, Out result) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        *(result++) = item;
+    }
+}
+
+
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
 int main(int argc, char** argv)
 {
     auto display_usage = [argv](std::ostream &stream)
@@ -340,7 +361,7 @@ int main(int argc, char** argv)
     opterr = 0;
 
     char c;
-    while ((c = getopt_long(argc, argv, "n:h:i:j", options, nullptr)) != -1)
+    while ((c = getopt_long(argc, argv, "n:h:j:i", options, nullptr)) != -1)
     {
         switch (c)
         {
@@ -362,6 +383,7 @@ int main(int argc, char** argv)
             selected_notation = KeyNotation::mappings[optarg];
             break;
         case 'j':
+            display(std::cout,optarg);
             break;
         case 'i':
             break;     
