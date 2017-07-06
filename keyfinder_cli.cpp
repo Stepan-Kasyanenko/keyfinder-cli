@@ -255,6 +255,7 @@ int main(int argc, char** argv)
 
     std::cerr << "It's my docker" << std::endl;
     return 1;
+    
 
 
     // Default to the standard key notation
