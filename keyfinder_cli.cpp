@@ -270,11 +270,11 @@ void fill_audio_data(const char* file_path, KeyFinder::AudioData &audio)
     4.5,
     4,
     2,
-    4.5
+    4.5,
     2,
-    3.5
+    3.5,
     1.5,
-    4
+    4,
   };
 
   static double MINOR_PROFILE[SEMITONES] = {
@@ -301,7 +301,7 @@ void fill_audio_data(const char* file_path, KeyFinder::AudioData &audio)
     3.5,
     2,
     1.5,
-    4
+    4,
   };
 
   static double OCTAVE_WEIGHTS[OCTAVES] = {
