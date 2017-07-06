@@ -339,7 +339,7 @@ int main(int argc, char** argv)
                << std::endl;
     };
 
-    auto display = [argv](std::ostream &stream, char mess)
+    auto display = [argv](std::ostream &stream, char* mess)
     {
         stream << mess << std::endl;
     };
