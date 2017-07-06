@@ -330,8 +330,8 @@ int main(int argc, char** argv)
     struct option options[] =
     {
         {"notation", required_argument, 0, 'n'},
-        {"major",    required_argument, 0, 'mj'},
-        {"minor",    required_argument, 0, 'mi'},
+        {"major",    required_argument, 0, 'j'},
+        {"minor",    required_argument, 0, 'i'},
         {"help",     no_argument,       0, 'h'},
         {0, 0, 0, 0}
     };
@@ -339,7 +339,7 @@ int main(int argc, char** argv)
     opterr = 0;
 
     char c;
-    while ((c = getopt_long(argc, argv, "n:h:mi:mj", options, nullptr)) != -1)
+    while ((c = getopt_long(argc, argv, "n:h:i:j", options, nullptr)) != -1)
     {
         switch (c)
         {
@@ -361,9 +361,9 @@ int main(int argc, char** argv)
             selected_notation = KeyNotation::mappings[optarg];
             break;
         }
-        case 'mj':
+        case 'j':
             break;
-        case 'mi':
+        case 'i':
             break;    
     }
 
