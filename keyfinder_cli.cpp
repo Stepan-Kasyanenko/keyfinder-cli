@@ -420,7 +420,6 @@ int main(int argc, char** argv)
             break;
         case 'i':
             display(std::cout,optarg);
-            toneProfileMinor();
             break;     
         }
     }
