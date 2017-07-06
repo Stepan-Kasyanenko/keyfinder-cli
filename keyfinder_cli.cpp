@@ -360,11 +360,11 @@ int main(int argc, char** argv)
 
             selected_notation = KeyNotation::mappings[optarg];
             break;
-        }
         case 'j':
             break;
         case 'i':
-            break;    
+            break;     
+        }
     }
 
     // There should be at least one argument left for the filename. We can
