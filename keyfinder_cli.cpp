@@ -245,27 +245,93 @@ void fill_audio_data(const char* file_path, KeyFinder::AudioData &audio)
     }
 }
 
+
+  static double MAJOR_PROFILE[SEMITONES] = {
+    7.23900502618145225142,
+    3.50351166725158691406,
+    3.58445177536649417505,
+    2.84511816478676315967,
+    5.81898892118549859731,
+    4.55865057415321039969,
+    2.44778850545506543313,
+    6.99473192146829525484,
+    3.39106613673504853068,
+    4.55614256655143456953,
+    4.07392666663523606019,
+    4.45932757378886890365,
+  };
+
+  static double MINOR_PROFILE[SEMITONES] = {
+    7.00255045060284420089,
+    3.14360279015996679775,
+    4.35904319714962529275,
+    5.40418120718934069657,
+    3.67234420879306133756,
+    4.08971184917797891956,
+    3.90791435991553992579,
+    6.19960288562316463867,
+    3.63424625625277419871,
+    2.87241191079875557435,
+    5.35467999794542670600,
+    3.83242038595048351013,
+  };
+
+  static double OCTAVE_WEIGHTS[OCTAVES] = {
+    0.39997267549999998559,
+    0.55634425248300645173,
+    0.52496636345143543600,
+    0.60847548384277727607,
+    0.59898115679999996974,
+    0.49072435317960994006,
+  };
+
+  static std::vector<double> tpMajor;
+  static std::vector<double> tpMinor;
+
+  const std::vector<double>& toneProfileMajor() {
+    if (tpMajor.size() == 0) {
+      for (unsigned int o = 0; o < OCTAVES; o++) {
+        for (unsigned int s = 0; s < SEMITONES; s++) {
+          tpMajor.push_back(OCTAVE_WEIGHTS[o] * MAJOR_PROFILE[s]);
+        }
+      }
+    }
+    return tpMajor;
+  }
+
+  const std::vector<double>& toneProfileMinor() {
+    if (tpMinor.size() == 0) {
+      for (unsigned int o = 0; o < OCTAVES; o++) {
+        for (unsigned int s = 0; s < SEMITONES; s++) {
+          tpMinor.push_back(OCTAVE_WEIGHTS[o] * MINOR_PROFILE[s]);
+        }
+      }
+    }
+    return tpMinor;
+  }
+
 int main(int argc, char** argv)
 {
     auto display_usage = [argv](std::ostream &stream)
     {
-        stream << "Usage: " << argv[0] << " [-h] [-n key-notation] filename"
+        stream << "Usage: " << argv[0] << " [-h] [-n key-notation] [-mj major-profile] [-mi minor-profile] filename"
                << std::endl;
     };
 
-    
-
-    std::cerr << "It's my docker" << std::endl;
-    return 1;
-    
-
+    auto display = [argv](std::ostream &stream, char mess)
+    {
+        stream << mess << std::endl;
+    };
 
     // Default to the standard key notation
     auto selected_notation = KeyNotation::standard;
 
+
     struct option options[] =
     {
         {"notation", required_argument, 0, 'n'},
+        {"major",    required_argument, 0, 'mj'},
+        {"minor",    required_argument, 0, 'mi'},
         {"help",     no_argument,       0, 'h'},
         {0, 0, 0, 0}
     };
@@ -273,7 +339,7 @@ int main(int argc, char** argv)
     opterr = 0;
 
     char c;
-    while ((c = getopt_long(argc, argv, "n:h", options, nullptr)) != -1)
+    while ((c = getopt_long(argc, argv, "n:h:mi:mj", options, nullptr)) != -1)
     {
         switch (c)
         {
@@ -295,6 +361,10 @@ int main(int argc, char** argv)
             selected_notation = KeyNotation::mappings[optarg];
             break;
         }
+        case 'mj':
+            break;
+        case 'mi':
+            break;    
     }
 
     // There should be at least one argument left for the filename. We can
@@ -311,6 +381,8 @@ int main(int argc, char** argv)
     KeyFinder::KeyFinder key_finder;
     KeyFinder::AudioData audio_data;
     KeyFinder::key_t key;
+    KeyFinder::Workspace workspace;
+    
 
     // Hide av* warnings and errors
     av_log_set_callback([](void *, int, const char*, va_list) {});
@@ -318,7 +390,10 @@ int main(int argc, char** argv)
     try
     {
         fill_audio_data(file_path, audio_data);
-        key = key_finder.keyOfAudio(audio_data);
+        key_finder.progressiveChromagram(audio_data, workspace);
+        key_finder.finalChromagram(workspace);
+        key = key_finder.keyOfChromaVector(workspace.chromagram->collapseToOneHop(),toneProfileMajor(),toneProfileMinor());
+        //key = key_finder.keyOfAudio(audio_data);
     }
     catch (std::exception &e)
     {
