@@ -386,6 +386,7 @@ int main(int argc, char** argv)
             display(std::cout,optarg);
             break;
         case 'i':
+            display(std::cout,optarg);
             break;     
         }
     }
