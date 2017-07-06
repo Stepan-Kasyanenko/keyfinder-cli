@@ -361,7 +361,7 @@ int main(int argc, char** argv)
     opterr = 0;
 
     char c;
-    while ((c = getopt_long(argc, argv, "n:h:j:i", options, nullptr)) != -1)
+    while ((c = getopt_long(argc, argv, "n:j:i:h", options, nullptr)) != -1)
     {
         switch (c)
         {
