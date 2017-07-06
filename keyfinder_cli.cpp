@@ -340,12 +340,6 @@ int main(int argc, char** argv)
                << std::endl;
     };
 
-    auto display = [argv](std::ostream &stream, char* mess)
-    {
-        stream << mess << std::endl;
-    };
-
-    display(std::cout,"v3");
     // Default to the standard key notation
     auto selected_notation = KeyNotation::standard;
 
@@ -392,7 +386,6 @@ int main(int argc, char** argv)
            for (unsigned int s = 0; s < SEMITONES; s++) {
                 profiles[s] =stod(profile_str[s]);
             }
-            display(std::cout,optarg);
             toneProfileMajor(profiles);
             break;
         case 'i':
@@ -400,7 +393,6 @@ int main(int argc, char** argv)
             for (unsigned int s = 0; s < SEMITONES; s++) {
                 profiles[s] =stod(profile_str[s]);
             }
-            display(std::cout,optarg);
             toneProfileMinor(profiles);
             break;     
         }
