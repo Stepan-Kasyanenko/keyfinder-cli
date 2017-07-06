@@ -330,8 +330,8 @@ int main(int argc, char** argv)
     struct option options[] =
     {
         {"notation", required_argument, 0, 'n'},
-        {"major",    required_argument, 0, 'j'},
-        {"minor",    required_argument, 0, 'i'},
+        // {"major",    required_argument, 0, 'j'},
+        // {"minor",    required_argument, 0, 'i'},
         {"help",     no_argument,       0, 'h'},
         {0, 0, 0, 0}
     };
